@@ -1858,7 +1858,7 @@ class FASMCompilator {
                 mnogene = opIVar = this.AX;
             }
             else {
-                this.FreeRegister(this.AX, this.AX, varibIVar, this.DX);
+                this.FreeRegisterNotUseRegVar(this.AX, this.AX, varibIVar, this.DX, opIVar);
                 this.fcw.mov(this.AX, varibIVar);
                 this.FreeRegister(this.AX, this.AX, this.BX, this.CX, this.DX);
                 if (mnognyk === varibIVar) {
@@ -1954,6 +1954,34 @@ class FASMCompilator {
         reg.top = null;
         return true;
     }
+    FreeRegisterNotUseRegVar(reg, ...useNotRegisters) {
+        if (reg.isAvailable || reg.top.type === typeTop.variable) {
+            reg.top = null;
+            return false;
+        }
+        for (let i = 0; i < this.registers.length; i++) {
+            if (useNotRegisters.some(e => e === this.registers[i]) === false && reg.top === this.registers[i].top) {
+                reg.top = null;
+                return true;
+            }
+        }
+        let repl = null;
+        for (let i = 0; i < this.registers.length; i++) {
+            if (useNotRegisters.some(e => e === this.registers[i]) === false && (this.registers[i].isAvailable || this.registers[i].top.type === typeTop.variable)) {
+                repl = this.registers[i];
+                break;
+            }
+        }
+        if (repl !== null) {
+            this.fcw.mov(repl, reg);
+        }
+        else {
+            let varib = this.CreateTempVariable(...useNotRegisters);
+            this.fcw.mov(varib, reg);
+        }
+        reg.top = null;
+        return true;
+    }
     FindRegisterByTop(top) {
         for (let i = 0; i < this.registers.length; i++) {
             if (this.registers[i].top === top)
@@ -1969,12 +1997,12 @@ class FASMCompilator {
         }
         return null;
     }
-    CreateTempVariable() {
+    CreateTempVariable(...useNotIVariable) {
         for (let i = 0; i < this.variables.length; i++) {
-            if (this.variables[i].isAvailable) {
-                return this.variables[i];
+            if (useNotIVariable.some(e => e === this.variables[i])) {
+                continue;
             }
-            else if (this.IsPeriodTop(this.variables[i].top) === false) {
+            if (this.variables[i].isAvailable || this.IsPeriodTop(this.variables[i].top) === false) {
                 return this.variables[i];
             }
         }
