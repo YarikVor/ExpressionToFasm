@@ -1519,7 +1519,7 @@ class FASMCompilator {
                     varIVar = this.DX;
                 }
                 mnognyk = varIVar;
-                this.FreeRegister(this.AX, this.AX, this.DX);
+                this.FreeRegister(this.AX, this.AX, this.DX, mnognyk);
                 this.fcw.mov(this.AX, c);
                 mnogene = this.AX;
             }
