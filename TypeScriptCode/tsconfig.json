@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+      "target": "ES2019",
+      "module": "es2015",
+      "lib": [
+          "DOM",
+          "ES2021"
+      ],
+      "moduleResolution": "node",
+      "outDir": "./build",
+      //"declaration": true,
+      //"diagnostics": true,
+      //"outFile":"./build/build.js",
+      "removeComments": true
+  }
+}
