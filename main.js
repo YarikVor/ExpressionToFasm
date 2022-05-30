@@ -1,0 +1,10 @@
+let b = new BinaryTree();
+let formula = window.prompt("Input Expression").replaceAll(" ", "");
+b.CompileTextToTops(formula);
+console.log(b.tops);
+b.Optimization();
+console.log(b.tops);
+let c = new FASMCompilator(b.tops, b.variables);
+let d = new DebuggerFasm(c);
+d.Start();
+document.getElementById("step").addEventListener("click", () => { d.Update(); });

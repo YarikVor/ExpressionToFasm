@@ -1,0 +1,121 @@
+body{
+    background-color: aliceblue;
+    margin: 0;
+    font-family: monospace;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+
+    padding-top: 10vh;
+    padding-bottom: 10vh;
+}
+
+* {
+    box-sizing: border-box;
+}
+div#overview {
+    background-color: rgb(220, 178, 178);
+    max-width: 100%;
+    width: 500px;
+    height: 100%;
+}
+
+div#overview > div{
+    float: left;
+}
+
+div#overview > div > div{
+    float: left;
+    display: flex;
+}
+
+div#ov-left{
+    background-color:rgb(120, 99, 99);
+    width: 300px;
+    height: 100%;
+}
+
+div#ov-right{
+    background-color: azure;
+    width: calc(100% - 300px);
+    height: 100%;
+    /* border-radius: 5px; */
+    padding: 4px;
+    border: black solid 1px;
+    overflow: auto;
+}
+
+div#registers{
+    height: 70px;
+    width: 100%;
+    background-color: blanchedalmond;
+    padding: 5px;
+    border: black solid 1px;
+}
+
+div#var{
+    height: 90px;
+    width: 100%;
+    background-color: gainsboro;
+    padding: 5px;
+    border: black solid 1px;
+}
+
+div#code{
+    height: calc(100% - 200px);
+    width: 100%;
+    background-color: darkkhaki;
+    border: black solid 1px;
+}
+
+div#items{
+    height: 40px;
+    width: 100%;
+    background-color: dimgrey;
+    border: black solid 1px;
+}
+
+div#vertex{
+    width: 100%;
+}
+
+ol#listVertex{
+    width: 100%;
+    margin: 4px;
+}
+
+ol#listVertex > li{
+    margin-bottom: 2px;
+    box-sizing: border-box;
+    width: 100%;
+    /*background-color: cornsilk;*/
+    padding: 4px;
+    border-radius: 2px;
+    
+}
+
+ol#listVertex > li.disabled{
+    box-sizing: border-box;
+    width: 100%;
+    background-color: lightgray;
+    padding: 4px;
+    color:gray;
+}
+
+
+ol#listVertex > li.active{
+    box-sizing: border-box;
+    width: 100%;
+    background-color: lightcoral;
+    padding: 4px;
+}
+
+
+ol#listVertex li::marker{
+    box-sizing: border-box;
+    width: 100%;
+    color: black;
+    font-weight: bolder;
+    padding: 4px;
+}
