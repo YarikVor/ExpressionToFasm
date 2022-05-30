@@ -1233,9 +1233,11 @@ class FASMCompilator {
         let op = null;
         if (left === this.AX) {
             op = left;
+            this.CloneOperatorInRegisters(op, this.AX, this.DX, right);
         }
         else if (right === this.AX) {
             op = right;
+            this.CloneOperatorInRegisters(op, this.AX, this.DX, right);
         }
         if (vtx.left === vtx.right) {
             if (left === null) {
@@ -1275,7 +1277,7 @@ class FASMCompilator {
                 left = this.FindVariableByTop(vtx.left);
                 let temp = null;
                 if (this.GetPeriodTopUseNumber(left.top, this.settingPeriodLoadOperator)) {
-                    temp = this.CloneOperatorInRegisters(left, this.DX, right);
+                    temp = this.CloneOperatorInRegisters(left, this.DX, right, multiplier, op);
                 }
                 if (temp !== null) {
                     left = temp;
@@ -1288,7 +1290,7 @@ class FASMCompilator {
                 right = this.FindVariableByTop(vtx.right);
                 let temp = null;
                 if (this.GetPeriodTopUseNumber(left.top, this.settingPeriodLoadOperator)) {
-                    temp = this.CloneOperatorInRegisters(left, this.DX, right);
+                    temp = this.CloneOperatorInRegisters(left, this.DX, right, multiplier, op);
                 }
                 if (temp !== null) {
                     right = temp;
@@ -1297,7 +1299,7 @@ class FASMCompilator {
                     multiplier = right;
                 }
                 else if (op === null) {
-                    this.FreeRegister(this.AX, this.AX, this.DX);
+                    this.FreeRegister(this.AX, this.AX, this.DX, multiplier, op);
                     this.fcw.mov(this.AX, right);
                     this.AX.top = right.top;
                     right = this.AX;
@@ -1313,7 +1315,7 @@ class FASMCompilator {
                         this.fcw.swap(right, this.AX);
                     }
                     else {
-                        this.FreeRegister(this.AX, this.AX, right, this.DX);
+                        this.FreeRegister(this.AX, this.AX, right, this.DX, multiplier, op);
                         this.fcw.mov(this.AX, right);
                     }
                     op = right = this.AX;
@@ -1326,7 +1328,7 @@ class FASMCompilator {
                         this.fcw.swap(left, this.AX);
                     }
                     else {
-                        this.FreeRegister(this.AX, this.AX, left, this.DX);
+                        this.FreeRegister(this.AX, this.AX, left, this.DX, multiplier, op);
                         this.fcw.mov(this.AX, left);
                     }
                     op = left = this.AX;
@@ -1342,7 +1344,7 @@ class FASMCompilator {
                             this.fcw.swap(right, this.AX);
                         }
                         else {
-                            this.FreeRegister(this.AX, this.AX, right, this.DX);
+                            this.FreeRegister(this.AX, this.AX, right, this.DX, multiplier, op);
                             this.fcw.mov(this.AX, right);
                         }
                         op = right = this.AX;
@@ -1357,7 +1359,7 @@ class FASMCompilator {
                             this.fcw.swap(left, this.AX);
                         }
                         else {
-                            this.FreeRegister(this.AX, this.AX, left, this.DX);
+                            this.FreeRegister(this.AX, this.AX, left, this.DX, multiplier, op);
                             this.fcw.mov(this.AX, left);
                         }
                         op = left = this.AX;
@@ -1392,9 +1394,9 @@ class FASMCompilator {
                 op = right = this.AX;
             }
             else {
-                this.FreeRegister(this.AX, this.AX, left, this.DX);
+                this.FreeRegister(this.AX, this.AX, left, this.DX, multiplier, op);
                 this.fcw.mov(this.AX, left);
-                this.FreeRegister(this.AX, this.AX, this.BX, this.CX, this.DX);
+                this.FreeRegister(this.AX, this.AX, this.BX, this.CX, this.DX, multiplier, op);
                 if (multiplier === left) {
                     this.fcw.mov(this.AX, right);
                     op = right = this.AX;
@@ -1406,7 +1408,7 @@ class FASMCompilator {
             }
         }
         if (multiplier !== this.DX) {
-            this.FreeRegister(this.DX, this.AX, multiplier, this.DX);
+            this.FreeRegister(this.DX, this.AX, multiplier, this.DX, multiplier, op);
         }
         if (op !== this.AX || multiplier === null) {
             throw new Error();
